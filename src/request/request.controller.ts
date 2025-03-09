@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequestService } from './request.service';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -26,7 +26,7 @@ export class RequestController {
 
     @ApiOperation({ summary: 'Get all requests' })
     @ApiResponse({ status: 200, description: 'Request list successfully retrieved' })
-    @Get()
+    @Get('all')
     async getAllRequests(){
         return this.requestService.getAllRequest();
     }
@@ -70,10 +70,12 @@ export class RequestController {
         return this.requestService.addResponse(requestId, createResponseDTO);
     }
 
+    @Get()
     @ApiOperation({ summary: 'Find requests by status or client' })
     @ApiResponse({ status: 200, description: 'Requests successfully retrieved' })
-    @Get('search')
-    async findRequests(@Param('status') status?: string, @Param('clientId') clientId?: string) {
+    @ApiQuery({ name: 'status', required: false, type: String })
+    @ApiQuery({ name: 'clientId', required: false, type: String })
+    async findRequests(@Query('status') status?: string, @Query('clientId') clientId?: string) {
         return this.requestService.findRequests(status, clientId);
     }
 
