@@ -4,10 +4,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateRequestDTO {
     @ApiProperty({ type: String, example: '' })
+    @IsNotEmpty()
     @IsOptional()
     requestNumber: number;
 
     @ApiProperty({ type: String, example: '' })
+    @IsNotEmpty()
     @IsOptional()
     userId: Types.ObjectId; 
 

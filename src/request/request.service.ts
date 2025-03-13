@@ -14,13 +14,18 @@ export class RequestService {
         @InjectModel('Response') private readonly responseModel: Model<Response>
     ){}
     
-    async createRequest(createRequestDTO: CreateRequestDTO): Promise<Request>{
-        const newRequest = new this.requestModel({
+    async createRequest(createRequestDTO: CreateRequestDTO): Promise<Request> {
+      const lastRequest = await this.requestModel.findOne().sort({ requestNumber: -1 }).select('requestNumber');
+      const newRequestNumber = lastRequest ? lastRequest.requestNumber + 1 : 1;
+  
+      const newRequest = new this.requestModel({
           ...createRequestDTO,
+          requestNumber: newRequestNumber,
           responses: [],
-        });
-        return newRequest.save();
-    }
+      });
+  
+      return newRequest.save();
+  }
 
     async getAllRequest(): Promise<Request[]>{
         const requests = await this.requestModel.find().exec();

@@ -4,9 +4,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { User } from 'src/user/interfaces/user.interface';
 
 export class CreateRequestDTO {
-    @ApiProperty({ type: String, example: '' })
-    @IsNotEmpty()
-    readonly requestNumber: number;
+    @ApiProperty({ type: Number, required: false, description: 'Auto-generated request number' })
+    @IsOptional()
+    readonly requestNumber?: number;
 
     @ApiProperty({ type: String, example: '' })
     @IsNotEmpty()
